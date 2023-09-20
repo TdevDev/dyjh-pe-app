@@ -6,8 +6,12 @@ function QuizChoices({ question, dispatch, answer }) {
       {question.answerChoices.map((choice, index) => (
         <button
           key={index}
-          className={`transform transition-transform hover:scale-105 font-semibold p-4 rounded-lg ${
+          className={`font-semibold p-4 rounded-lg ${
             colors[index % colors.length]
+          } ${
+            answer !== null
+              ? "cursor-not-allowed opacity-60"
+              : "transform transition-transform hover:scale-105 hover:bg-opacity-80"
           }`}
           disabled={answer !== null}
           onClick={() => dispatch({ type: "newAnswer", payload: index })}

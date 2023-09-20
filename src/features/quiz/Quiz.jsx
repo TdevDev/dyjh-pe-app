@@ -16,6 +16,7 @@ const initialState = {
   answer: null,
   points: 0,
   highscore: 0,
+  passed: false,
 };
 
 function reducer(state, action) {
@@ -40,8 +41,15 @@ function reducer(state, action) {
             : state.points,
       };
     }
-    case "nextQuestion":
-      return { ...state, index: state.index + 1, answer: null };
+    case "nextQuestion": {
+      const isPassed = (state.points / (state.index + 1)) * 100 >= 50;
+      return {
+        ...state,
+        index: state.index + 1,
+        answer: null,
+        passed: isPassed,
+      };
+    }
     case "finished":
       return {
         ...state,
@@ -58,10 +66,8 @@ function reducer(state, action) {
 
 function Quiz() {
   const { grade, unit } = useParams();
-  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [{ questions, status, index, answer, points, passed }, dispatch] =
+    useReducer(reducer, initialState);
 
   const numQuestions = questions.length;
 
@@ -111,7 +117,7 @@ function Quiz() {
         </>
       )}
       {status === "finished" && (
-        <QuizFinishScreen dispatch={dispatch} points={points} />
+        <QuizFinishScreen dispatch={dispatch} points={points} passed={passed} />
       )}
     </div>
   );

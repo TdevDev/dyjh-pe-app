@@ -7,6 +7,7 @@ import Quiz from "./features/quiz/Quiz";
 import Flashcards from "./features/flashcards/Flashcards";
 import StudentLoginForm from "./ui/StudentLoginForm";
 import UnitSelection from "./ui/UnitSelection";
+import { StudentDataProvider } from "./contexts/StudentDataContext";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +31,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <StudentDataProvider>
+      <RouterProvider router={router} />;
+    </StudentDataProvider>
+  );
 }
 
 export default App;

@@ -5,7 +5,7 @@ function QuizProgress({ index, numQuestions, points }) {
         Questions <strong>{index + 1}</strong> / {numQuestions}
       </p>
       <p>
-        <strong>{points}</strong> / 10
+        Score: <strong>{points}</strong> / {numQuestions}
       </p>
     </header>
   );

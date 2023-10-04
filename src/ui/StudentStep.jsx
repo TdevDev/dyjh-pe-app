@@ -15,7 +15,7 @@ function StudentStep({ studentNumber, dispatch }) {
         id="studentNumber"
         value={studentNumber}
         onChange={handleStudentNumberChange}
-        placeholder="Student Number"
+        placeholder="#"
         min="1"
         max="35"
         className="mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"

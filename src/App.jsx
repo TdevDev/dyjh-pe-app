@@ -1,13 +1,20 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import AppLayout from "./ui/AppLayout";
-import Home from "./ui/Home";
-import VocabularyList from "./features/vocab/VocabularyList";
-import Quiz from "./features/quiz/Quiz";
-import Flashcards from "./features/flashcards/Flashcards";
-import StudentLoginForm from "./ui/StudentLoginForm";
-import UnitSelection from "./ui/UnitSelection";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { StudentDataProvider } from "./contexts/StudentDataContext";
+import { QuizDataProvider } from "./contexts/QuizDataContext";
+import { lazy, Suspense } from "react";
+
+import AppLayout from "./ui/AppLayout";
+
+const Home = lazy(() => import("./ui/Home"));
+const VocabularyList = lazy(() => import("./features/vocab/VocabularyList"));
+const Quiz = lazy(() => import("./features/quiz/Quiz"));
+const Flashcards = lazy(() => import("./features/flashcards/Flashcards"));
+const StudentLoginForm = lazy(() => import("./ui/StudentLoginForm"));
+const UnitSelection = lazy(() => import("./ui/UnitSelection"));
+const RouteGuard = lazy(() => import("./ui/RouteGuard"));
 
 const router = createBrowserRouter([
   {
@@ -20,12 +27,37 @@ const router = createBrowserRouter([
       { path: "/login", element: <StudentLoginForm /> },
       {
         path: "/grade/:grade/unit",
-        element: <UnitSelection />,
+        element: (
+          <RouteGuard>
+            <UnitSelection />,
+          </RouteGuard>
+        ),
       },
 
-      { path: "/grade/:grade/unit/:unit/vocab", element: <VocabularyList /> },
-      { path: "/grade/:grade/unit/:unit/flashcards", element: <Flashcards /> },
-      { path: "/grade/:grade/unit/:unit/quiz", element: <Quiz /> },
+      {
+        path: "/grade/:grade/unit/:unit/vocab",
+        element: (
+          <RouteGuard>
+            <VocabularyList />
+          </RouteGuard>
+        ),
+      },
+      {
+        path: "/grade/:grade/unit/:unit/flashcards",
+        element: (
+          <RouteGuard>
+            <Flashcards />
+          </RouteGuard>
+        ),
+      },
+      {
+        path: "/grade/:grade/unit/:unit/quiz",
+        element: (
+          <RouteGuard>
+            <Quiz />
+          </RouteGuard>
+        ),
+      },
     ],
   },
 ]);
@@ -33,7 +65,12 @@ const router = createBrowserRouter([
 function App() {
   return (
     <StudentDataProvider>
-      <RouterProvider router={router} />;
+      <QuizDataProvider>
+        <ToastContainer />
+        <Suspense>
+          <RouterProvider router={router} />
+        </Suspense>
+      </QuizDataProvider>
     </StudentDataProvider>
   );
 }

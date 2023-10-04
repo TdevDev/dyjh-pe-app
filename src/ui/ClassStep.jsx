@@ -8,7 +8,7 @@ function ClassStep({ classNumber, dispatch }) {
 
   return (
     <div className="text-center mt-4">
-      <label htmlFor="classStep">Select your class number:</label>
+      <label htmlFor="classStep">Select your class:</label>
       <br />
       <select
         className="mt-1 py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm bg-white"
@@ -16,7 +16,7 @@ function ClassStep({ classNumber, dispatch }) {
         value={classNumber}
         onChange={handleClassChange}
       >
-        <option value="">Select your class:</option>
+        <option value="">#</option>
         {Array.from({ length: 15 }, (_, index) => (
           <option key={index + 1} value={index + 1}>
             {index + 1}

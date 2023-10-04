@@ -1,11 +1,13 @@
-function QuizProgress({ index, numQuestions, points }) {
+import { useQuizData } from "../../contexts/QuizDataContext";
+
+function QuizProgress({ sport }) {
+  const { points } = useQuizData().quizState;
+
   return (
     <header>
+      <p>{sport}</p>
       <p>
-        Questions <strong>{index + 1}</strong> / {numQuestions}
-      </p>
-      <p>
-        Score: <strong>{points}</strong> / {numQuestions}
+        Score: <strong>{points}</strong>
       </p>
     </header>
   );

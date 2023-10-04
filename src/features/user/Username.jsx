@@ -16,7 +16,7 @@ function Username() {
   const formattedStudentNumber = studentNumber.toString().padStart(2, "0");
 
   return (
-    <div className="text-white  text-sm font-semibold uppercase md:block">
+    <div className="text-white text-xl font-semibold uppercase ">
       {studentData
         ? `${grade}${formattedClassNumber} - ${formattedStudentNumber}`
         : ""}

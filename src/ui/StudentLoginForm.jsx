@@ -35,7 +35,10 @@ function StudentLoginForm() {
 
   async function handleAuthentication() {
     if (grade && classNumber && studentNumber) {
-      const userId = `${grade}-${classNumber}-${studentNumber}`;
+      const formattedClassNumber = classNumber.toString().padStart(2, "0");
+      const formattedStudentNumber = studentNumber.toString().padStart(2, "0");
+
+      const userId = `${grade}-${formattedClassNumber}-${formattedStudentNumber}`;
       const userRef = doc(db, "users", userId);
 
       try {

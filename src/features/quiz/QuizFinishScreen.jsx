@@ -3,6 +3,7 @@ import { getFirestore, updateDoc, doc, getDoc } from "firebase/firestore/lite";
 import { useCallback, useEffect } from "react";
 
 import { useParams } from "react-router-dom";
+import { useQuizData } from "../../contexts/QuizDataContext";
 import { useStudentData } from "../../contexts/StudentDataContext";
 import Button from "../../ui/Button";
 import LogoutButton from "../../ui/LogoutButton";
@@ -21,16 +22,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-function QuizFinishScreen({ points, dispatch, passed }) {
+function QuizFinishScreen() {
   const { unit, grade } = useParams();
-
-  // const navigate = useNavigate();
-
   const { studentData } = useStudentData();
+  const { dispatch: quizDataDispatch, quizState } = useQuizData();
+  const { points, passed } = quizState;
 
   const handleMarkUnitCompleted = useCallback(async () => {
     if (passed) {
-      const userId = `${studentData.grade}-${studentData.classNumber}-${studentData.studentNumber}`;
+      const formattedClassNumber = studentData.classNumber
+        .toString()
+        .padStart(2, "0");
+      const formattedStudentNumber = studentData.studentNumber
+        .toString()
+        .padStart(2, "0");
+
+      const userId = `${studentData.grade}-${formattedClassNumber}-${formattedStudentNumber}`;
       const userRef = doc(db, "users", userId);
 
       try {
@@ -63,20 +70,45 @@ function QuizFinishScreen({ points, dispatch, passed }) {
 
   return (
     <div className="flex flex-col mx-2 gap-2">
-      <span>
+      <span className="">
         You scored <strong>{points}</strong> / 9!
       </span>
-      {passed && <span>Thank you for finishing your homework!</span>}
-      <div className="mx-auto">
-        <Button to={unitPath} type="primary">
-          Study
-        </Button>
-
+      {passed && <span>Unit {unit} complete!</span>}
+      <div className="max-h-screen">
+        {passed && (
+          <img
+            className="w-full max-w-md mx-auto block"
+            src="/assets/Tim_Cartoon_Passed.jpg"
+            alt=""
+          />
+        )}
         {!passed && (
-          <Button type="primary" onClick={() => dispatch({ type: "restart" })}>
+          <img
+            className="w-full max-w-md mx-auto block"
+            src="/assets/Tim_Cartoon_NotPassed.jpg"
+            alt=""
+          />
+        )}
+      </div>
+      <div className="mx-auto mt-4 flex flex-col">
+        {!passed && (
+          <Button
+            type="primary"
+            onClick={() => quizDataDispatch({ type: "TRY_AGAIN" })}
+          >
             Try again
           </Button>
         )}
+        <Button
+          to={unitPath}
+          type="primary"
+          onClick={() => {
+            quizDataDispatch({ type: "RESTART" });
+          }}
+        >
+          Study
+        </Button>
+
         <LogoutButton type="primary" />
       </div>
     </div>

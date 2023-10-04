@@ -19,7 +19,7 @@ function VocabularyList() {
       <h2 className="text-center">{sport}</h2>
       <p className="underline mb-2">Unit: {unit}</p>
       <Button type="primary" to={`/grade/${grade}/unit/${unit}/quiz`}>
-        Quiz
+        Homework
       </Button>
       <div className="p-4 grid gap-4 md:grid-cols-3">
         {terms.map((item, index) => (
